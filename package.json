@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-	"dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/gustavopals/habit-tracker-backend#readme",
   "dependencies": {
+    "@prisma/client": "^4.8.1",
     "fastify": "^4.11.0"
   },
   "devDependencies": {
+    "prisma": "^4.8.1",
     "tsx": "^3.12.2",
     "typescript": "^4.9.4"
   }
