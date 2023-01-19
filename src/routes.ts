@@ -125,4 +125,40 @@ export async function appRoutes(app: FastifyInstance) {
 			});
 		}
 	});
+
+	app.get("/summary", async () => {
+		// [ { date: 17/01 , amount: 5, completed: 1 }, { date: 17/01 , amount: 2, completed: 2 }, {} ]
+		// Query mais complexa => SQL na não (RAW)
+		//
+
+		const summary = await prisma.$queryRaw`
+			select
+				D.id,
+				D.date,
+				(
+					select
+						cast(count(*) as float)
+					from
+						day_habits DH
+					where
+						DH.day_id = D.id
+				) as completed,
+				(
+					select
+						cast(count(*) as float)
+					from
+						habit_week_days HWD
+					join habits H
+					on
+						H.id = HWD.habit_id
+					where
+						HWD.week_day = cast(strftime('%w', D.date/1000.0, 'unixepoch') as int)
+							and H.created_at <= D.date
+				) as amount
+			from
+				days D
+		`;
+
+		return summary;
+	});
 }
