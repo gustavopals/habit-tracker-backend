@@ -4,6 +4,10 @@ import { z } from "zod";
 import { prisma } from "./lib/prisma";
 
 export async function appRoutes(app: FastifyInstance) {
+	app.get("/", () => {
+		return "Hello World";
+	});
+
 	app.post("/habits", async (request) => {
 		const createHabitBody = z.object({
 			title: z.string(),
@@ -64,9 +68,10 @@ export async function appRoutes(app: FastifyInstance) {
 			},
 		});
 
-		const completedHabits = day?.dayHabits.map((dayHabit) => {
-			return dayHabit.habit_id;
-		});
+		const completedHabits =
+			day?.dayHabits.map((dayHabit) => {
+				return dayHabit.habit_id;
+			}) ?? [];
 
 		return {
 			possibleHabits,
